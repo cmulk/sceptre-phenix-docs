@@ -29,6 +29,11 @@ jobs:
         with:
           # Fetch all history for all tags and branches
           fetch-depth: 0
+          # Some orgs restrict the default GITHUB_TOKEN to read-only, which
+          # blocks mike's gh-pages push even though `permissions:` above
+          # requests write. Fall back to it when no PAT secret is configured
+          # (e.g. on forks) so this keeps working there too.
+          token: ${{ secrets.DEPLOY_TOKEN || github.token }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
